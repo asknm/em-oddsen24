@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Create SA key
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EM_ODDSEN24_TEST }}' > test-key.json
+      - name: Use test project
+        run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools use em-oddsen24-test
+      - name: Get config
+        run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools apps:sdkconfig web --json > ./src/firebase-config.json
       - run: cd ./react && npm ci && npm run build && cd ..
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
