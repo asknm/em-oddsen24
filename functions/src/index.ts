@@ -1,19 +1,17 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { newUserHandler } from "./newUser";
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+import { firestore, credential } from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { region, FunctionBuilder } from "firebase-functions";
+import { myRegion } from "./constants";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+initializeApp({
+    credential: credential.applicationDefault(),
+});
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const db = firestore();
+const functionBuilder: FunctionBuilder = region(myRegion);
+
+exports.newUser =
+    functionBuilder
+        .auth.user().onCreate(async (user) => await newUserHandler(user, db));
