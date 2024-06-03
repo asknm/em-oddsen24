@@ -20,7 +20,7 @@ jobs:
         run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools use em-oddsen24-test
       - name: Get config
         run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools apps:sdkconfig web --json > ./react/src/firebase-config.json
-      - run: cd ./react && npm ci && npm run build && cd ..
+      - run: cd ./react && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,23 @@
+name: Firebase Functions Deploy Test
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+        cache-dependency-path: functions/package-lock.json
+    - name: Build
+      run: cd ./functions && npm ci
+    - name: Create SA key
+      run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > test-key.json
+    - name: Deploy
+      run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools deploy --only functions --json -f
