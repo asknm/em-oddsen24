@@ -18,6 +18,6 @@ jobs:
     - name: Build
       run: cd ./functions && npm ci
     - name: Create SA key
-      run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > test-key.json
+      run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EM_ODDSEN24_TEST }}' > test-key.json
     - name: Deploy
       run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools deploy --only functions --json -f
