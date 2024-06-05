@@ -1,6 +1,6 @@
 import { UserRecord } from "firebase-admin/auth";
 import { FieldValue, Firestore } from "firebase-admin/firestore";
-import { InsertUser } from "./domain/user";
+import { InsertUser } from "../domain/user";
 
 export async function newUserHandler(userRecord: UserRecord, db: Firestore) {
 	const docRef = db.collection("users").doc(userRecord.uid);
