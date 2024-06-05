@@ -29,4 +29,11 @@ exports.fetchAllMatchesFromApi = functionBuilder
         timeoutSeconds: 540,
     })
     .https
-    .onRequest(async _ => await fetchAllMatchesFromApiHandler(db, footballDataKey.value()));
+    .onRequest(async (_, res) => {
+        try {
+            await fetchAllMatchesFromApiHandler(db, footballDataKey.value());
+            res.status(200).send();
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
