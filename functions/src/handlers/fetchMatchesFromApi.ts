@@ -6,7 +6,7 @@ import { fromApiMatch } from "../extensions/firebaseMatchExtensions";
 
 export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: string) {
     const matchesFromApi = await getMatchesFromApi(apiKey);
-    await Promise.all(matchesFromApi.map(apiMatch => storeMatchInDb(apiMatch)));
+    await Promise.all(matchesFromApi.map(async apiMatch => await storeMatchInDb(apiMatch)));
 
     async function storeMatchInDb(apiMatch: ApiMatch) {
         const matchRef = matchDoc(db, apiMatch.id.toString());
@@ -15,7 +15,7 @@ export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: strin
         // if (matchData) {
         //     return;
         // }
-        const firebaseMatch : FirebaseMatch = fromApiMatch(apiMatch);
+        const firebaseMatch: FirebaseMatch = fromApiMatch(apiMatch);
         await matchRef.set(firebaseMatch);
     }
 }

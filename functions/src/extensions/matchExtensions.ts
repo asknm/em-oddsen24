@@ -2,7 +2,7 @@ import { CollectionReference, DocumentReference, Firestore } from "firebase-admi
 import { FirebaseMatch } from "../domain/match";
 
 export function matchDoc(db: Firestore, mid: string): DocumentReference<FirebaseMatch> {
-    return matchCollection(db).doc(mid) as DocumentReference<FirebaseMatch>;
+    return matchCollection(db).doc(mid);
 }
 
 export function matchCollection(db: Firestore): CollectionReference<FirebaseMatch> {

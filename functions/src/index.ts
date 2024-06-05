@@ -19,7 +19,7 @@ const footballDataKey = defineSecret('football_data_key');
 
 exports.newUser =
     functionBuilder
-        .auth.user().onCreate(user => newUserHandler(user, db));
+        .auth.user().onCreate(async (user) => await newUserHandler(user, db));
 
 exports.fetchAllMatchesFromApi = functionBuilder
     .runWith({
@@ -29,4 +29,4 @@ exports.fetchAllMatchesFromApi = functionBuilder
         timeoutSeconds: 540,
     })
     .https
-    .onRequest(_ => fetchAllMatchesFromApiHandler(db, footballDataKey.value()));
+    .onRequest(async _ => await fetchAllMatchesFromApiHandler(db, footballDataKey.value()));
