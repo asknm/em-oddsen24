@@ -19,6 +19,7 @@ export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: strin
             // }
             const firebaseMatch: FirebaseMatch = fromApiMatch(apiMatch);
             await matchRef.set(firebaseMatch);
+            logger.info("Saved match to db", matchRef.id);
         } catch (error) {
             logger.error("Failed to save match to db", error);
         }
