@@ -1,9 +1,8 @@
-import { DocumentReference, Firestore, Timestamp } from "firebase-admin/firestore";
+import { Firestore, Timestamp } from "firebase-admin/firestore";
 import { matchDayDoc, matchDocFromMatchDayDoc } from "../extensions/matchExtensions";
 import { getMatchesFromApi } from "../helpers/apiHelpers";
 import { FirebaseMatch } from "../domain/match";
 import { fromApiTeam } from "../extensions/teamExtensions";
-import { FirebaseMatchDay } from "../domain/matchDay";
 
 export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: string) {
     const matchesFromApi = await getMatchesFromApi(apiKey);
@@ -11,7 +10,7 @@ export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: strin
     for (const apiMatch of matchesFromApi) {
         const date = new Date(apiMatch.utcDate);
         const matchDayId = `${date.getUTCMonth().toString().padStart(2, '0')}${date.getUTCDate().toString().padStart(2, '0')}`;
-        const matchDayRef : DocumentReference<FirebaseMatchDay> = matchDayDoc(db, matchDayId);
+        const matchDayRef = matchDayDoc(db, matchDayId);
         const matchDaySnapshot = await matchDayRef.get();
         const matchDayData = matchDaySnapshot.data();
         if (!matchDayData) {

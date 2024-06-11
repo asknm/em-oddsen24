@@ -24,7 +24,6 @@ exports.newUser =
 exports.fetchAllMatchesFromApi = functionBuilder
     .runWith({
         secrets: [footballDataKey],
-        maxInstances: 1,
     })
     .https
     .onRequest(async (_, res) => {
