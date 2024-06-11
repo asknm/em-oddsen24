@@ -24,9 +24,7 @@ exports.newUser =
 exports.fetchAllMatchesFromApi = functionBuilder
     .runWith({
         secrets: [footballDataKey],
-        memory: "8GB",
         maxInstances: 1,
-        timeoutSeconds: 540,
     })
     .https
     .onRequest(async (_, res) => {
