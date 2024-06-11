@@ -8,12 +8,25 @@ import Match from './Match';
 import { DtoMatch } from '../../types/Match';
 
 type MatchDayProps = {
+    matchDayId: string,
     date: number,
-    matches: DtoMatch[]
 }
 
 export default function MatchDay(props: MatchDayProps) {
-    const [expanded, setExpanded] = useState(Date.now() - 24 * 60 * 60 * 1000 < props.date);
+    const [expanded, setExpanded] = useState(false);
+    // const matches = 
+
+    function expandIfToday() {
+        const date = new Date(props.date);
+        if (Date.UTC(date.getFullYear(), date.getUTCMonth(), date.getUTCDate()) === props.date) {
+
+        }
+
+        async function getMatchesAndExpand() {
+            
+            setExpanded(true);
+        }
+    }
 
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
@@ -35,11 +48,11 @@ export default function MatchDay(props: MatchDayProps) {
         <div style={{ border: "1px solid black" }} onClick={() => toggleExpanded()} >
             <Typography variant="h5"> {new Date(props.date).toLocaleDateString('no-NO')} </Typography>
             <Collapse in={expanded}>
-                {props.matches.map((value, index) => {
+                {/* {props.matches.map((value, index) => {
                     return <div className={"row"} key={index} onClick={() => navigateToMatchPage(value)}>
                         <Match match={value} />
                     </div>
-                })}
+                })} */}
             </Collapse>
         </div>
         <p></p>

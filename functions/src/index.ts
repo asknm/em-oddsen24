@@ -6,6 +6,7 @@ import { region, FunctionBuilder } from "firebase-functions";
 import { myRegion } from "./constants";
 import { defineSecret } from "firebase-functions/params";
 import { fetchAllMatchesFromApiHandler } from "./handlers/fetchMatchesFromApi";
+import { getMatchDays } from "./handlers/getMatchDays";
 
 initializeApp({
     credential: credential.applicationDefault(),
@@ -30,6 +31,19 @@ exports.fetchAllMatchesFromApi = functionBuilder
         try {
             await fetchAllMatchesFromApiHandler(db, footballDataKey.value());
             res.status(200).send();
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
+exports.getMatchDays = functionBuilder
+    .https
+    .onRequest(async (_, res) => {
+        try {
+            res.set('Access-Control-Allow-Origin', '*');
+            const matchDays = await getMatchDays(db);
+            // res.set('Cache-Control', 'public, max-age=3600');
+            res.status(200).send(matchDays);
         } catch (error) {
             res.status(500).send(error);
         }
