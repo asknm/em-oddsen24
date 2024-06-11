@@ -42,7 +42,7 @@ exports.getMatchDays = functionBuilder
         try {
             res.set('Access-Control-Allow-Origin', '*');
             const matchDays = await getMatchDays(db);
-            // res.set('Cache-Control', 'public, max-age=3600');
+            res.set('Cache-Control', 'public, max-age=3600');
             res.status(200).send(matchDays);
         } catch (error) {
             res.status(500).send(error);
