@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import Typography from "@mui/material/Typography/Typography";
 
@@ -16,17 +16,18 @@ export default function MatchDay(props: MatchDayProps) {
     const [expanded, setExpanded] = useState(false);
     // const matches = 
 
-    function expandIfToday() {
-        const date = new Date(props.date);
+    useEffect(() => {
+        const date = new Date(Date.now());
         if (Date.UTC(date.getFullYear(), date.getUTCMonth(), date.getUTCDate()) === props.date) {
-
+            getMatchesAndExpand();
         }
 
         async function getMatchesAndExpand() {
-            
+            // await fetch()
+
             setExpanded(true);
         }
-    }
+    }, []);
 
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
@@ -41,6 +42,9 @@ export default function MatchDay(props: MatchDayProps) {
     }
 
     function toggleExpanded() {
+        // if (!expanded && !matches) {
+
+        // }
         setExpanded(!expanded);
     }
 

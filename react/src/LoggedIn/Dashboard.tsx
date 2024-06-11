@@ -1,50 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MatchDay from './Components/MatchDay';
-import { DtoMatchDictionary } from '../types/Match';
-import { doc, DocumentReference, getDoc, getFirestore, collection, query, orderBy, getDocs } from "@firebase/firestore";
-import { DtoMatchDay } from '../types/matchDay';
+import { DtoMatchDay } from '../types/DtoMatchDay';
 
 export default function Dashboard() {
     // const [matchDict, setMatchDict] = useState({} as DtoMatchDictionary)
     const [matchDays, setMatchDays] = useState([] as DtoMatchDay[])
 
-    async function getMatchDays() {
-        // const col = collection(getFirestore(), "matchDays");
-        // const q = query(col, orderBy("date"));
-        // const querySnapshot = await getDocs(q);
-        // querySnapshot.forEach((doc) => {
-        //     // doc.data() is never undefined for query doc snapshots
-        //     console.log(doc.id, " => ", doc.data());
-        // });
+    useEffect(() => {
+        async function getMatchDays() {
+            // const response = await fetch('/getMatchDays');
+            const response = await fetch('https://europe-central2-em-oddsen24-test.cloudfunctions.net/getMatchDays');
+            const data = await response.json();
+            setMatchDays(data);
+        }
 
-        const response = await fetch('/getMatchDays');
-        const data = await response.json();
-        setMatchDays(data);
-
-        // const ref = doc(getFirestore(), "matches", mid) as DocumentReference<FirebaseMatch>;
-        // const document = await getDoc(ref);
-        // const dtoMatch = ToDtoMatch(document);
-        // if (dtoMatch) {
-        //     setMatch(dtoMatch);
-        // }
-    }
-
-    // useEffect(() => {
-    //     async function getMatchDays() {
-
-    //     }
-
-
-    //     async function getMatches() {
-    //         const response = await fetch('/getMatches');
-    //         const data = await response.json();
-    //         setMatchDict(data);
-    //     }
-
-    //     getMatches()
-    // }, []);
+        getMatchDays();
+    }, []);
 
     return <div>
         {

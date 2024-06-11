@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { Score } from "./score"
 import { Team } from "./team"
+import { StandingWithFinished } from "./standing";
 
 export interface BaseMatch<DateType> {
     utcDate: DateType,
@@ -17,8 +18,18 @@ export interface ApiMatch extends BaseMatchWithId<number, string> {
     score: Score,
 }
 
-export type FirebaseMatch = BaseMatch<Timestamp>;
+export interface FirebaseMatch extends BaseMatch<Timestamp> {
+    standing: StandingWithFinished | undefined,
+};
 
 export type GetAllMatchesApiResponse = {
     matches: ApiMatch[],
 };
+
+export interface DtoMatch extends BaseMatchWithId<string, number> {
+    standing: StandingWithFinished | undefined,
+};
+
+export function HasStarted(match: DtoMatch): boolean {
+    return Date.now() > match.utcDate;
+}

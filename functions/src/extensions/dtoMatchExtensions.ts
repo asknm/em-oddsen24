@@ -1,7 +1,6 @@
 // import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-// import { DtoMatch, ApiMatch } from "common";
-// import { FirebaseMatch } from "../constants";
 // import { fromApiTeam } from "./teamExtensions";
+// import { ApiMatch, DtoMatch, FirebaseMatch } from "../domain/match";
 
 // export function fromSnapshot(snapshot: QueryDocumentSnapshot<FirebaseMatch>): DtoMatch {
 //     const dbMatch = snapshot.data();
