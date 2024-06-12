@@ -2,6 +2,7 @@ name: Firebase Functions Deploy Prod
 
 on:
   push:
+    branches: [ "main" ]
 
 jobs:
   build:

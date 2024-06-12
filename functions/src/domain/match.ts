@@ -19,7 +19,7 @@ export interface ApiMatch extends BaseMatchWithId<number, string> {
 }
 
 export interface FirebaseMatch extends BaseMatch<Timestamp> {
-    standing: StandingWithFinished | undefined,
+    standing: StandingWithFinished | null,
 };
 
 export type GetAllMatchesApiResponse = {
@@ -27,7 +27,7 @@ export type GetAllMatchesApiResponse = {
 };
 
 export interface DtoMatch extends BaseMatchWithId<string, number> {
-    standing: StandingWithFinished | undefined,
+    standing: StandingWithFinished | null,
 };
 
 export function HasStarted(match: DtoMatch): boolean {

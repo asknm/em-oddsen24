@@ -28,11 +28,7 @@ export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: strin
             utcDate: Timestamp.fromDate(date),
             homeTeam: fromApiTeam(apiMatch.homeTeam),
             awayTeam: fromApiTeam(apiMatch.awayTeam),
-            standing: {
-                finished: false,
-                home: 0,
-                away: 0,
-            },
+            standing: null,
         };
         await matchRef.set(firebaseMatch);
     }
