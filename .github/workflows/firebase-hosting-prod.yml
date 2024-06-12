@@ -15,11 +15,11 @@ jobs:
           cache: 'npm'
           cache-dependency-path: ./react/package-lock.json
       - name: Create SA key
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EM_ODDSEN24 }}' > test-key.json
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EM_ODDSEN24 }}' > key.json
       - name: Use test project
-        run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools use em-oddsen24
+        run: export GOOGLE_APPLICATION_CREDENTIALS=key.json && npx firebase-tools use em-oddsen24
       - name: Get config
-        run: export GOOGLE_APPLICATION_CREDENTIALS=test-key.json && npx firebase-tools apps:sdkconfig web --json > ./react/src/firebase-config.json
+        run: export GOOGLE_APPLICATION_CREDENTIALS=key.json && npx firebase-tools apps:sdkconfig web --json > ./react/src/firebase-config.json
       - run: cd ./react && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
