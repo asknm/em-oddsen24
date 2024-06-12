@@ -21,7 +21,7 @@ export default function MatchDay(props: MatchDayProps) {
         const response = await fetch("https://europe-central2-em-oddsen24-test.cloudfunctions.net/getMatchDayMatches", {
             headers: {
                 'Match-Day-Id': props.matchDayId,
-            }
+            },
         });
         const data = await response.json();
 

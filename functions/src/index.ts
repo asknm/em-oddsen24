@@ -56,6 +56,11 @@ exports.getMatchDayMatches = functionBuilder
         try {
             res.set('Access-Control-Allow-Origin', '*');
             res.set('Access-Control-Allow-Headers', '*');
+            res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+            if (req.method === 'OPTIONS') {
+                res.status(200).end();
+                return;
+            }
             const matchDayId = req.get('Match-Day-Id');
             if (!matchDayId) {
                 res.status(400).send('MatchDayId header is required');
