@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import Typography from "@mui/material/Typography/Typography";
 
@@ -15,9 +15,9 @@ type MatchDayProps = {
 export default function MatchDay(props: MatchDayProps) {
     const [expanded, setExpanded] = useState(false);
     const [matches, setMatches] = useState([] as DtoMatch[]);
-    const hasReadMatches = false;
+    const [hasReadMatches, setHasReadMatches] = useState(false);
 
-    async function getMatchesAndExpand() {
+    const getMatchesAndExpand = useCallback(async () => {
         const response = await fetch("https://europe-central2-em-oddsen24-test.cloudfunctions.net/getMatchDayMatches", {
             headers: {
                 'Match-Day-Id': props.matchDayId,
@@ -25,23 +25,24 @@ export default function MatchDay(props: MatchDayProps) {
         });
         const data = await response.json();
 
+        setHasReadMatches(true)
         setMatches(data);
         setExpanded(true);
-    }
+    }, [props.matchDayId]);
 
     useEffect(() => {
         const date = new Date(Date.now());
         if (Date.UTC(date.getFullYear(), date.getUTCMonth(), date.getUTCDate()) === props.date) {
             getMatchesAndExpand();
         }
-    }, []);
+    }, [getMatchesAndExpand, props.date]);
 
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
 
     const navigate = useNavigate();
     function navigateToMatchPage(match: DtoMatch) {
-        navigate(`/m/${match.id}`, {
+        navigate(`/matchDay/${props.matchDayId}/match/${match.id}`, {
             state: {
                 match: match,
             }
@@ -61,7 +62,7 @@ export default function MatchDay(props: MatchDayProps) {
         <div style={{ border: "1px solid black" }} onClick={() => toggleExpanded()} >
             <Typography variant="h5"> {new Date(props.date).toLocaleDateString('no-NO')} </Typography>
             <Collapse in={expanded}>
-                {matches.map((value, index) => {
+                {expanded && matches.map((value, index) => {
                     return <div className={"row"} key={index} onClick={() => navigateToMatchPage(value)}>
                         <Match match={value} />
                     </div>

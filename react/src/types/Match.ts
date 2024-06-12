@@ -8,7 +8,9 @@ export interface BaseMatch<DateType> {
     awayTeam: Team,
 }
 
-export type FirebaseMatch = BaseMatch<Timestamp>;
+export interface FirebaseMatch extends BaseMatch<Timestamp>{
+    standing: StandingWithFinished | undefined,
+};
 
 
 export interface BaseMatchWithId<IdType, DateType> extends BaseMatch<DateType> {
@@ -21,18 +23,19 @@ export interface DtoMatch extends BaseMatchWithId<string, number> {
 
 export type DtoMatchDictionary = { [date: number]: DtoMatch[] };
 
-// export function ToDtoMatch(snapshot: DocumentSnapshot<FirebaseMatch>): DtoMatch | undefined {
-//     const dbMatch = snapshot.data();
-//     if (!dbMatch) {
-//         return undefined;
-//     }
-//     return {
-//         id: snapshot.id,
-//         utcDate: dbMatch.utcDate.toMillis(),
-//         homeTeam: dbMatch.homeTeam,
-//         awayTeam: dbMatch.awayTeam,
-//     };
-// }
+export function ToDtoMatch(snapshot: DocumentSnapshot<FirebaseMatch>): DtoMatch | undefined {
+    const dbMatch = snapshot.data();
+    if (!dbMatch) {
+        return undefined;
+    }
+    return {
+        id: snapshot.id,
+        utcDate: dbMatch.utcDate.toMillis(),
+        homeTeam: dbMatch.homeTeam,
+        awayTeam: dbMatch.awayTeam,
+        standing: dbMatch.standing,
+    };
+}
 
 export function HasStarted(match: DtoMatch): boolean {
     return Date.now() > match.utcDate;

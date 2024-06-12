@@ -5,14 +5,15 @@ import { BaseBet, BetWithBetter, ToBetWithBetter } from "../../types/Bet"
 import { Typography } from "@mui/material"
 
 type BetListProps = {
-    mid: string,
+    matchDayId: string,
+    matchId: string,
 }
 
 export default function BetList(props: BetListProps) {
     const [bets, setBets] = useState<BetWithBetter[]>([])
 
     useEffect(() => {
-        onSnapshot(collection(getFirestore(), "matches", props.mid, "bets") as CollectionReference<BaseBet>, async snapshot => {
+        onSnapshot(collection(getFirestore(), "matchDays", props.matchDayId, "matches", props.matchId, "bets") as CollectionReference<BaseBet>, async snapshot => {
             const betsWithBetterName = await Promise.all<BetWithBetter>(snapshot.docs.map(async doc => await ToBetWithBetter(doc)));
             setBets(betsWithBetterName);
         });

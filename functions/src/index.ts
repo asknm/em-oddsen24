@@ -5,7 +5,7 @@ import { initializeApp } from "firebase-admin/app";
 import { region, FunctionBuilder } from "firebase-functions";
 import { myRegion } from "./constants";
 import { defineSecret } from "firebase-functions/params";
-import { fetchAllMatchesFromApiHandler } from "./handlers/fetchMatchesFromApi";
+import { fetchAllMatchesFromApiHandler } from "./handlers/fetchAllMatchesFromApi";
 import { getMatchDays } from "./handlers/getMatchDays";
 import { getMatchDayMatches } from "./handlers/getMatchDayMatches";
 
@@ -55,7 +55,9 @@ exports.getMatchDayMatches = functionBuilder
     .onRequest(async (req, res) => {
         try {
             res.set('Access-Control-Allow-Origin', '*');
+            // TODO: Is '*' needed or should this be 'Match-Day-Id'?
             res.set('Access-Control-Allow-Headers', '*');
+            // TODO: Needed?
             res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
             if (req.method === 'OPTIONS') {
                 res.status(200).end();
@@ -63,7 +65,7 @@ exports.getMatchDayMatches = functionBuilder
             }
             const matchDayId = req.get('Match-Day-Id');
             if (!matchDayId) {
-                res.status(400).send('MatchDayId header is required');
+                res.status(400).send('Match-Day-Id header is required');
             }
             const matches = await getMatchDayMatches(db, matchDayId!);
             // res.set('Cache-Control', 'public, max-age=60');

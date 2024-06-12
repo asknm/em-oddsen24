@@ -32,7 +32,7 @@ export default function Home() {
         </AppBar>
 
         <Routes>
-            <Route path='/m/:mid' element={<MatchPage />} />
+            <Route path='/matchDay/:matchDayId/match/:matchId' element={<MatchPage />} />
             <Route path="/top" element={<TopList />} />
             <Route path="/" element={<Dashboard />} />
         </Routes>
