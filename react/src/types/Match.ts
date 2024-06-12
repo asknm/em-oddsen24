@@ -12,12 +12,8 @@ export interface FirebaseMatch extends BaseMatch<Timestamp>{
     standing: StandingWithFinished | undefined,
 };
 
-
-export interface BaseMatchWithId<IdType, DateType> extends BaseMatch<DateType> {
-    id: IdType
-}
-
-export interface DtoMatch extends BaseMatchWithId<string, number> {
+export interface DtoMatch extends BaseMatch<number> {
+    id: string,
     standing: StandingWithFinished | undefined,
 };
 

@@ -1,8 +1,7 @@
 name: Deploy React Prod
 on:
   push:
-    branches:
-      - main
+    
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

@@ -31,7 +31,7 @@ exports.fetchAllMatchesFromApi = functionBuilder
     .onRequest(async (_, res) => {
         try {
             await fetchAllMatchesFromApiHandler(db, footballDataKey.value());
-            res.status(200).end();
+            res.status(200).send();
         } catch (error) {
             res.status(500).send(error);
         }

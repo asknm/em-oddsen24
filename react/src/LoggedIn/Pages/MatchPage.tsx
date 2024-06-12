@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { doc, DocumentReference, getDoc, getFirestore } from "@firebase/firestore";
 import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom"
@@ -17,18 +17,23 @@ export default function MatchPage() {
 
     const { matchDayId, matchId } = useParams();
 
-    if (!match) {
-        getMatch(matchDayId!, matchId!);
-    }
-
-    async function getMatch(matchDayId: string, matchId: string) {
-        const ref = doc(getFirestore(), "matchDays", matchDayId, "matches", matchId) as DocumentReference<FirebaseMatch>;
-        const document = await getDoc(ref);
-        const dtoMatch = ToDtoMatch(document);
-        if (dtoMatch) {
-            setMatch(dtoMatch);
+    useEffect(() => {
+        if (!match) {
+            console.log(1);
+            getMatch(matchDayId!, matchId!);
         }
-    }
+
+        async function getMatch(matchDayId: string, matchId: string) {
+            const ref = doc(getFirestore(), "matchDays", matchDayId, "matches", matchId) as DocumentReference<FirebaseMatch>;
+            const document = await getDoc(ref);
+            console.log("matchDays", matchDayId, "matches", matchId);
+            const dtoMatch = ToDtoMatch(document);
+            if (dtoMatch) {
+                console.log(2);
+                setMatch(dtoMatch);
+            }
+        }
+    }, [match, matchId, matchDayId]);
 
     const uid = getAuth().currentUser?.uid;
 

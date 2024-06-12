@@ -9,24 +9,23 @@ import RGL, { WidthProvider } from "react-grid-layout";
 
 import { DtoMatch } from '../../types/Match';
 
+const ReactGridLayout = WidthProvider(RGL); const layout = [
+    { i: 'date', x: 0, y: 0, w: 3, h: 1, static: true },
+    { i: 'odds', x: 3, y: 0, w: 2, h: 1, static: true },
+    { i: 'f0', x: 0, y: 1, w: 1, h: 2, static: true },
+    { i: 't0', x: 1, y: 1, w: 1, h: 2, static: true },
+    { i: '-', x: 2, y: 1, w: 1, h: 2, static: true },
+    { i: 't1', x: 3, y: 1, w: 1, h: 2, static: true },
+    { i: 'f1', x: 4, y: 1, w: 1, h: 2, static: true },
+];
+
+const theme = responsiveFontSizes(createTheme())
+
 type MatchProps = {
     match: DtoMatch
 }
 
 export default function Match(props: MatchProps) {
-    const ReactGridLayout = WidthProvider(RGL);
-
-    const layout = [
-        { i: 'date', x: 0, y: 0, w: 3, h: 1, static: true },
-        { i: 'odds', x: 3, y: 0, w: 2, h: 1, static: true },
-        { i: 'f0', x: 0, y: 1, w: 1, h: 2, static: true },
-        { i: 't0', x: 1, y: 1, w: 1, h: 2, static: true },
-        { i: '-', x: 2, y: 1, w: 1, h: 2, static: true },
-        { i: 't1', x: 3, y: 1, w: 1, h: 2, static: true },
-        { i: 'f1', x: 4, y: 1, w: 1, h: 2, static: true },
-    ];
-
-    const theme = responsiveFontSizes(createTheme())
 
     return <div style={{ border: "1px solid black" }} >
         <ThemeProvider theme={theme}>
