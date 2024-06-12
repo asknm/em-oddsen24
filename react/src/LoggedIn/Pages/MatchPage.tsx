@@ -8,7 +8,6 @@ import Odds from "../Components/Odds/Odds";
 import { getAuth } from "@firebase/auth";
 import BetList from "../Components/BetList";
 
-
 export default function MatchPage() {
     const { state } = useLocation();
     const stateMatch: DtoMatch | undefined = state?.match;
@@ -19,17 +18,15 @@ export default function MatchPage() {
 
     useEffect(() => {
         if (!match) {
-            console.log(1);
             getMatch(matchDayId!, matchId!);
         }
 
         async function getMatch(matchDayId: string, matchId: string) {
             const ref = doc(getFirestore(), "matchDays", matchDayId, "matches", matchId) as DocumentReference<FirebaseMatch>;
             const document = await getDoc(ref);
-            console.log("matchDays", matchDayId, "matches", matchId);
             const dtoMatch = ToDtoMatch(document);
             if (dtoMatch) {
-                console.log(2);
+                console.log(dtoMatch);
                 setMatch(dtoMatch);
             }
         }

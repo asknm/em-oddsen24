@@ -1,9 +1,7 @@
 import React from 'react';
-import { onSnapshot } from "@firebase/firestore"
-import { useEffect, useState } from "react"
 import OddsAsBookmaker from "./OddsAsBookmaker"
 import OddsAsBetter from "./OddsAsBetter"
-import { getOddsRef, OddsWithBookmakerName, ToOddsArray, ToOddsWithBookmakerName } from "../../../types/Odds"
+import { ToOddsArray } from "../../../types/Odds"
 import { Typography } from '@mui/material';
 import { DtoMatch } from '../../../types/Match';
 
@@ -13,29 +11,19 @@ type OddsProps = {
 }
 
 export default function Odds(props: OddsProps) {
-    const [odds, setOdds] = useState<OddsWithBookmakerName | undefined>();
-
-    useEffect(() => {
-        onSnapshot(getOddsRef(props.match.id), async doc => {
-            if (doc.exists()) {
-                const withName = await ToOddsWithBookmakerName(doc.data());
-                setOdds(withName);
-            }
-        });
-    });
 
     let oddsComponent: JSX.Element | null = null;
-    if (odds) {
-        if (props.uid === odds.bookmaker.id) {
-            oddsComponent = <OddsAsBookmaker odds={odds} mid={props.match.id} />
+    if (props.match.odds) {
+        if (props.uid === props.match.odds.bookmaker.id) {
+            oddsComponent = <OddsAsBookmaker odds={props.match.odds} mid={props.match.id} />
         }
-        else if (odds.H) {
-            oddsComponent = <OddsAsBetter odds={ToOddsArray(odds)} match={props.match} uid={props.uid} />
+        else if (props.match.odds.H) {
+            oddsComponent = <OddsAsBetter odds={ToOddsArray(props.match.odds)} match={props.match} uid={props.uid} />
         }
     }
 
     return <div>
-        <Typography variant="body1" > {odds?.bookmaker.name} </Typography>
+        <Typography variant="body1" > {props.match.odds?.bookmaker.name} </Typography>
         {oddsComponent}
     </div>
 
