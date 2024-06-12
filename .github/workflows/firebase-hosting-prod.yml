@@ -16,7 +16,7 @@ jobs:
           cache-dependency-path: ./react/package-lock.json
       - name: Create SA key
         run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EM_ODDSEN24 }}' > key.json
-      - name: Use test project
+      - name: Use prod project
         run: export GOOGLE_APPLICATION_CREDENTIALS=key.json && npx firebase-tools use em-oddsen24
       - name: Get config
         run: export GOOGLE_APPLICATION_CREDENTIALS=key.json && npx firebase-tools apps:sdkconfig web --json > ./react/src/firebase-config.json
