@@ -55,9 +55,10 @@ exports.getMatchDayMatches = functionBuilder
     .onRequest(async (req, res) => {
         try {
             res.set('Access-Control-Allow-Origin', '*');
-            const matchDayId = req.get('matchDayId');
+            res.set('Access-Control-Allow-Headers', 'MatchDayId');
+            const matchDayId = req.get('MatchDayId');
             if (!matchDayId) {
-                res.status(400).send('matchDayId header is required');
+                res.status(400).send('MatchDayId header is required');
             }
             const matches = await getMatchDayMatches(db, matchDayId!);
             res.set('Cache-Control', 'public, max-age=60');

@@ -14,18 +14,25 @@ type MatchDayProps = {
 
 export default function MatchDay(props: MatchDayProps) {
     const [expanded, setExpanded] = useState(false);
-    // const matches = 
+    const [matches, setMatches] = useState([] as DtoMatch[]);
+    const hasReadMatches = false;
+
+    async function getMatchesAndExpand() {
+        const response = await fetch("https://europe-central2-em-oddsen24-test.cloudfunctions.net/getMatchDayMatches", {
+            headers: {
+                'matchDayId': props.matchDayId,
+            }
+        });
+        const data = await response.json();
+
+        setMatches(data);
+        setExpanded(true);
+    }
 
     useEffect(() => {
         const date = new Date(Date.now());
         if (Date.UTC(date.getFullYear(), date.getUTCMonth(), date.getUTCDate()) === props.date) {
             getMatchesAndExpand();
-        }
-
-        async function getMatchesAndExpand() {
-            // await fetch()
-
-            setExpanded(true);
         }
     }, []);
 
@@ -42,21 +49,23 @@ export default function MatchDay(props: MatchDayProps) {
     }
 
     function toggleExpanded() {
-        // if (!expanded && !matches) {
-
-        // }
-        setExpanded(!expanded);
+        if (!expanded && !hasReadMatches) {
+            getMatchesAndExpand();
+        }
+        else {
+            setExpanded(!expanded);
+        }
     }
 
     return <ThemeProvider theme={theme} key={props.date}>
         <div style={{ border: "1px solid black" }} onClick={() => toggleExpanded()} >
             <Typography variant="h5"> {new Date(props.date).toLocaleDateString('no-NO')} </Typography>
             <Collapse in={expanded}>
-                {/* {props.matches.map((value, index) => {
+                {matches.map((value, index) => {
                     return <div className={"row"} key={index} onClick={() => navigateToMatchPage(value)}>
                         <Match match={value} />
                     </div>
-                })} */}
+                })}
             </Collapse>
         </div>
         <p></p>
