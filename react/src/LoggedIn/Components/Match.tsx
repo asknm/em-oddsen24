@@ -7,7 +7,7 @@ import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import RGL, { WidthProvider } from "react-grid-layout";
 
-import { DtoMatch, FirebaseMatchWithId } from '../../types/Match';
+import { FirebaseMatchWithId } from '../../types/Match';
 
 const ReactGridLayout = WidthProvider(RGL); const layout = [
     { i: 'date', x: 0, y: 0, w: 3, h: 1, static: true },

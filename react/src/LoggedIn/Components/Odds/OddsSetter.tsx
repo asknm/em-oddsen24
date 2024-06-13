@@ -6,9 +6,8 @@ import NumericInput from "react-numeric-input";
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import RGL, { WidthProvider } from "react-grid-layout";
-import { Odds, OddsArray, OddsOptions } from '../../../types/Odds';
-import { DtoMatch, FirebaseMatchWithId, getMatchDoc } from '../../../types/Match';
-import { match } from 'assert';
+import { OddsArray, OddsOptions } from '../../../types/Odds';
+import { FirebaseMatchWithId, getMatchDoc } from '../../../types/Match';
 const ReactGridLayout = WidthProvider(RGL);
 
 type OddsSetterProps = {

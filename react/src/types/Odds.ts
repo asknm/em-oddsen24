@@ -1,4 +1,4 @@
-import { doc, DocumentReference, getFirestore, getDoc } from "@firebase/firestore";
+import { DocumentReference } from "@firebase/firestore";
 import { getUserFromRef, User, UserWithId } from "./User";
 
 export type OddsWithBookmakerRef = OddsWithBookmaker<DocumentReference<User>>;

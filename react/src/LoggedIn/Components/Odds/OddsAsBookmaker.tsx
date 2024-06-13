@@ -1,8 +1,8 @@
 import React from 'react';
 import OddsSetter from "./OddsSetter"
 import OddsViewer from "./OddsViewer"
-import { Odds, ToOddsArray } from '../../../types/Odds';
-import { DtoMatch, FirebaseMatchWithId } from '../../../types/Match';
+import { ToOddsArray } from '../../../types/Odds';
+import { FirebaseMatchWithId } from '../../../types/Match';
 
 type OddsAsBookmakerProps = {
     matchDayId: string,
