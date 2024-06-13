@@ -2,12 +2,13 @@ import { newUserHandler } from "./handlers/newUser";
 
 import { firestore, credential } from "firebase-admin";
 import { initializeApp } from "firebase-admin/app";
-import { region, FunctionBuilder } from "firebase-functions";
+import { region, FunctionBuilder, logger } from "firebase-functions";
 import { myRegion } from "./constants";
 import { defineSecret } from "firebase-functions/params";
 import { fetchAllMatchesFromApiHandler } from "./handlers/fetchAllMatchesFromApi";
 import { getMatchDays } from "./handlers/getMatchDays";
 import { getMatchDayMatches } from "./handlers/getMatchDayMatches";
+import { updateMatchDay } from "./handlers/updateMatchDay";
 
 initializeApp({
     credential: credential.applicationDefault(),
@@ -33,6 +34,7 @@ exports.fetchAllMatchesFromApi = functionBuilder
             await fetchAllMatchesFromApiHandler(db, footballDataKey.value());
             res.status(200).send();
         } catch (error) {
+            logger.error(error);
             res.status(500).send(error);
         }
     });
@@ -46,6 +48,7 @@ exports.getMatchDays = functionBuilder
             // res.set('Cache-Control', 'public, max-age=3600');
             res.status(200).send(matchDays);
         } catch (error) {
+            logger.error(error);
             res.status(500).send(error);
         }
     });
@@ -71,6 +74,27 @@ exports.getMatchDayMatches = functionBuilder
             // res.set('Cache-Control', 'public, max-age=60');
             res.status(200).send(matches);
         } catch (error) {
+            logger.error(error);
+            res.status(500).send(error);
+        }
+    });
+
+exports.updateMatchDay = functionBuilder
+    .runWith({
+        secrets: [footballDataKey],
+    })
+    .https
+    .onRequest(async (req, res) => {
+        try {
+            res.set('Access-Control-Allow-Origin', '*');
+            const matchDayId = req.query.matchDayId as string | undefined;
+            if (!matchDayId) {
+                res.status(400).send('matchDayId query parameter is required');
+            }
+            await updateMatchDay(db, footballDataKey.value(), matchDayId!);
+            res.status(204).end();
+        } catch (error) {
+            logger.error(error);
             res.status(500).send(error);
         }
     });

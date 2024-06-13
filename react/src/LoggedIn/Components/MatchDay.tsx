@@ -38,6 +38,18 @@ export default function MatchDay(props: MatchDayProps) {
         }
     }, [getMatchesAndExpand, props.date]);
 
+    useEffect(() => {
+        if (Date.now() < props.date) {
+            updateStandingIfNeeded();
+        }
+
+        async function updateStandingIfNeeded() {
+            await fetch(`/updateMatchDay?matchDayId=${props.matchDayId}`, {
+                method: 'POST',
+            });
+        }
+    }, [props.matchDayId]);
+
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
 

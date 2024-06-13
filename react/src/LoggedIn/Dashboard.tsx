@@ -5,7 +5,6 @@ import MatchDay from './Components/MatchDay';
 import { DtoMatchDay } from '../types/DtoMatchDay';
 
 export default function Dashboard() {
-    // const [matchDict, setMatchDict] = useState({} as DtoMatchDictionary)
     const [matchDays, setMatchDays] = useState([] as DtoMatchDay[])
 
     useEffect(() => {
@@ -22,10 +21,6 @@ export default function Dashboard() {
     return <div>
         {
             matchDays.map(matchDay => <MatchDay matchDayId={matchDay.id} date={matchDay.date} key={matchDay.id} />)
-
-            // Object.entries(matchDict).map(([key, matches]) =>
-            //     <MatchDay matches={matches} date={parseInt(key)} key={key} />
-            // )
         }
     </div >
 }

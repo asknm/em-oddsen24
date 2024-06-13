@@ -20,6 +20,7 @@ export interface ApiMatch extends BaseMatchWithId<number, string> {
 
 export interface FirebaseMatch extends BaseMatch<Timestamp> {
     standing: StandingWithFinished | null,
+    lastUpdated: Timestamp | null,
 };
 
 export type GetAllMatchesApiResponse = {

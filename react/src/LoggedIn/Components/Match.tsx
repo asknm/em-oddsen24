@@ -30,7 +30,7 @@ export default function Match(props: MatchProps) {
     return <div style={{ border: "1px solid black" }} >
         <ThemeProvider theme={theme}>
             <ReactGridLayout layout={layout} cols={5} rowHeight={32}>
-                <Typography variant="h6" key="date"> {props.match.utcDate.toDate().toLocaleTimeString('no-NO')} </Typography>
+                <Typography variant="h6" key="date"> {new Date(props.match.utcDate.seconds*1000).toLocaleTimeString('no-NO')} </Typography>
                 {/* TODO: <Typography variant="body1" key="odds" align="right"> Odds: {this.state.oddsSetterName} </Typography> */}
 
                 <div key="f0"> <img alt="" src={props.match.homeTeam.crest} height={50} /> </div>

@@ -9,13 +9,9 @@ import { getAuth } from "@firebase/auth";
 import BetList from "../Components/BetList";
 
 export default function MatchPage() {
-    const { state } = useLocation();
-    const stateMatch: FirebaseMatchWithId | undefined = state?.match;
-
-    const [match, setMatch] = useState<FirebaseMatchWithId | undefined>(stateMatch);
+    const [match, setMatch] = useState<FirebaseMatchWithId | undefined>(useLocation().state?.match);
 
     const { matchDayId, matchId } = useParams();
-
 
     useEffect(() => {
         if (!match) {

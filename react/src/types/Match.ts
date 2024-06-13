@@ -1,4 +1,4 @@
-import { DocumentSnapshot, Timestamp } from "@firebase/firestore";
+import { Timestamp } from "@firebase/firestore";
 import { Team } from "./Team";
 import { StandingWithFinished } from "./Standing";
 import { doc, DocumentReference, getFirestore, CollectionReference, collection } from "@firebase/firestore";
@@ -17,28 +17,6 @@ export type FirebaseMatch = BaseMatch<Timestamp>;
 export interface FirebaseMatchWithId extends BaseMatch<Timestamp> {
     id: string,
 };
-
-export interface DtoMatch extends BaseMatch<number> {
-    id: string,
-};
-
-export type DtoMatchDictionary = { [date: number]: DtoMatch[] };
-
-export function ToDtoMatch(snapshot: DocumentSnapshot<FirebaseMatch>): DtoMatch | undefined {
-    const dbMatch = snapshot.data();
-    console.log(dbMatch);
-    if (!dbMatch) {
-        return undefined;
-    }
-    return {
-        id: snapshot.id,
-        utcDate: dbMatch.utcDate.toMillis(),
-        homeTeam: dbMatch.homeTeam,
-        awayTeam: dbMatch.awayTeam,
-        standing: dbMatch.standing,
-        odds: dbMatch.odds,
-    };
-}
 
 export function HasStarted(match: FirebaseMatchWithId): boolean {
     return Date.now() > match.utcDate.toMillis();

@@ -1,6 +1,6 @@
 export type Standing = {
-    home: number,
-    away: number;
+    home: number | null,
+    away: number | null;
 }
 
 export interface StandingWithFinished extends Standing {
