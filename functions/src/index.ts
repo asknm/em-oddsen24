@@ -8,7 +8,7 @@ import { defineSecret } from "firebase-functions/params";
 import { fetchAllMatchesFromApiHandler } from "./handlers/fetchAllMatchesFromApi";
 import { getMatchDays } from "./handlers/getMatchDays";
 import { getMatchDayMatches } from "./handlers/getMatchDayMatches";
-import { updateMatchDay } from "./handlers/updateMatchDay";
+import { updateMatch } from "./handlers/updateMatch";
 
 initializeApp({
     credential: credential.applicationDefault(),
@@ -79,7 +79,7 @@ exports.getMatchDayMatches = functionBuilder
         }
     });
 
-exports.updateMatchDay = functionBuilder
+exports.updateMatch = functionBuilder
     .runWith({
         secrets: [footballDataKey],
     })
@@ -88,10 +88,14 @@ exports.updateMatchDay = functionBuilder
         try {
             res.set('Access-Control-Allow-Origin', '*');
             const matchDayId = req.query.matchDayId as string | undefined;
+            const matchId = req.query.matchId as string | undefined;
             if (!matchDayId) {
                 res.status(400).send('matchDayId query parameter is required');
             }
-            await updateMatchDay(db, footballDataKey.value(), matchDayId!);
+            if (!matchId) {
+                res.status(400).send('matchId query parameter is required');
+            }
+            await updateMatch(db, footballDataKey.value(), matchDayId!, matchId!);
             res.status(204).end();
         } catch (error) {
             logger.error(error);

@@ -42,8 +42,8 @@
         "region": "europe-central2"
       },
       {
-        "source": "/updateMatchDay",
-        "function": "updateMatchDay",
+        "source": "/updateMatch",
+        "function": "updateMatch",
         "region": "europe-central2"
       }
     ]

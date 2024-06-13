@@ -38,18 +38,6 @@ export default function MatchDay(props: MatchDayProps) {
         }
     }, [getMatchesAndExpand, props.date]);
 
-    useEffect(() => {
-        if (Date.now() < props.date) {
-            updateStandingIfNeeded();
-        }
-
-        async function updateStandingIfNeeded() {
-            await fetch(`/updateMatchDay?matchDayId=${props.matchDayId}`, {
-                method: 'POST',
-            });
-        }
-    }, [props.matchDayId, props.date]);
-
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
 
@@ -77,7 +65,7 @@ export default function MatchDay(props: MatchDayProps) {
             <Collapse in={expanded}>
                 {expanded && matches.map((value, index) => {
                     return <div className={"row"} key={index} onClick={() => navigateToMatchPage(value)}>
-                        <Match match={value} />
+                        <Match matchDayId={props.matchDayId} match={value} />
                     </div>
                 })}
             </Collapse>
