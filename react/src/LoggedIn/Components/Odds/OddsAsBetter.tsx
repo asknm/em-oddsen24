@@ -18,7 +18,6 @@ export default function OddsAsBetter(props: OddsAsBetterProps) {
     const [bet, setBet] = useState<BaseBet | null | undefined>(undefined);
 
     useEffect(() => {
-        console.log('OddsAsBetter useEffect')
         onSnapshot(getBetsDoc(props.matchDayId, props.match.id, props.uid), doc => {
             if (!doc.exists()) {
                 setBet(null);

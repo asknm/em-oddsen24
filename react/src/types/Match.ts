@@ -19,7 +19,7 @@ export interface FirebaseMatchWithId extends BaseMatch<Timestamp> {
 };
 
 export function HasStarted(match: FirebaseMatchWithId): boolean {
-    return Date.now() > match.utcDate.toMillis();
+    return Date.now() > match.utcDate.seconds * 1000;
 }
 
 export function getMatchDoc(matchDayId: string, matchId: string): DocumentReference<FirebaseMatch> {
