@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from "react"
-import { collection, CollectionReference, getFirestore, onSnapshot } from "@firebase/firestore"
-import { BaseBet, BetWithBetter, ToBetWithBetter } from "../../types/Bet"
+import { onSnapshot } from "@firebase/firestore"
+import { BetWithBetter, ToBetWithBetter, getBetsCol } from "../../types/Bet"
 import { Typography } from "@mui/material"
 
 type BetListProps = {
@@ -13,17 +13,17 @@ export default function BetList(props: BetListProps) {
     const [bets, setBets] = useState<BetWithBetter[]>([])
 
     useEffect(() => {
-        onSnapshot(collection(getFirestore(), "matchDays", props.matchDayId, "matches", props.matchId, "bets") as CollectionReference<BaseBet>, async snapshot => {
+        onSnapshot(getBetsCol(props.matchDayId, props.matchId), async snapshot => {
             const betsWithBetterName = await Promise.all<BetWithBetter>(snapshot.docs.map(async doc => await ToBetWithBetter(doc)));
             setBets(betsWithBetterName);
         });
-    });
+    }, [props.matchDayId, props.matchId]);
 
     const selectionSymbols = ["H", "U", "B"];
 
     return <div>
         {bets.map((value, index) => {
-            return <Typography variant="body1" key={index}> {value.amount}kr på {selectionSymbols[value.selection]} : {value.better} : {value.timestamp && value.timestamp.toDate().toLocaleString()} </Typography>
+            return <Typography variant="body1" key={index}> {value.amount}kr på {selectionSymbols[value.selection]} : {value.better} : {value.timestamp && value.timestamp.toDate().toLocaleString('nb-NO')} </Typography>
         })}
     </div>
 

@@ -1,15 +1,16 @@
 import React from 'react';
-import { doc, DocumentReference, getFirestore, onSnapshot } from "@firebase/firestore"
+import { onSnapshot } from "@firebase/firestore"
 import { useEffect, useState } from "react"
-import { BaseBet } from "../../../types/Bet"
+import { BaseBet, getBetsDoc } from "../../../types/Bet"
 import OddsBetter from "./OddsBetter"
 import OddsViewer from "./OddsViewer"
 import { OddsArray } from '../../../types/Odds';
-import { DtoMatch, HasStarted } from '../../../types/Match';
+import { FirebaseMatchWithId, HasStarted } from '../../../types/Match';
 
 type OddsAsBetterProps = {
+    matchDayId: string,
     odds: OddsArray,
-    match: DtoMatch,
+    match: FirebaseMatchWithId,
     uid: string,
 }
 
@@ -17,17 +18,18 @@ export default function OddsAsBetter(props: OddsAsBetterProps) {
     const [bet, setBet] = useState<BaseBet | null | undefined>(undefined);
 
     useEffect(() => {
-        onSnapshot(doc(getFirestore(), "matches", props.match.id, "bets", props.uid) as DocumentReference<BaseBet>, doc => {
+        console.log('OddsAsBetter useEffect')
+        onSnapshot(getBetsDoc(props.matchDayId, props.match.id, props.uid), doc => {
             if (!doc.exists()) {
                 setBet(null);
                 return;
             }
             setBet(doc.data());
         });
-    });
+    }, [props.matchDayId, props.match.id, props.uid]);
 
     if (bet === null && !HasStarted(props.match)) {
-        return <OddsBetter odds={props.odds} mid={props.match.id} uid={props.uid} />
+        return <OddsBetter matchDayId={props.matchDayId} odds={props.odds} matchId={props.match.id} uid={props.uid} />
     }
 
     return <OddsViewer odds={props.odds} />

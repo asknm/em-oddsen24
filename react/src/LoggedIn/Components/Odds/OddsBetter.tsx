@@ -6,12 +6,13 @@ import { createTheme, responsiveFontSizes, ThemeProvider, Typography } from '@mu
 import NumericInput from 'react-numeric-input';
 import { useState } from 'react';
 import { doc, getFirestore, increment, serverTimestamp, setDoc, updateDoc } from '@firebase/firestore';
-import { InsertBet } from '../../../types/Bet';
+import { getBetsDoc, InsertBet } from '../../../types/Bet';
 import { OddsArray, OddsOptions } from '../../../types/Odds';
 const ReactGridLayout = WidthProvider(RGL);
 
 type OddsBetterProps = {
-    mid: string,
+    matchDayId: string,
+    matchId: string,
     odds: OddsArray,
     uid: string,
 }
@@ -28,7 +29,7 @@ export default function OddsBetter(props: OddsBetterProps) {
     }
 
     async function placeBet() {
-        const ref = doc(getFirestore(), "matches", props.mid, "bets", props.uid)
+        const ref = getBetsDoc(props.matchDayId, props.matchId, props.uid);
         const bet: InsertBet = {
             selection: selected,
             amount: amount,

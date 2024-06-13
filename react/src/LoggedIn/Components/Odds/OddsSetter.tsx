@@ -1,5 +1,5 @@
 import React from 'react';
-import { doc, DocumentReference, getFirestore, updateDoc } from "@firebase/firestore";
+import { updateDoc } from "@firebase/firestore";
 import { useState } from "react";
 import NumericInput from "react-numeric-input";
 
@@ -7,10 +7,13 @@ import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import RGL, { WidthProvider } from "react-grid-layout";
 import { Odds, OddsArray, OddsOptions } from '../../../types/Odds';
+import { DtoMatch, FirebaseMatchWithId, getMatchDoc } from '../../../types/Match';
+import { match } from 'assert';
 const ReactGridLayout = WidthProvider(RGL);
 
 type OddsSetterProps = {
-    mid: string
+    matchDayId: string,
+    match: FirebaseMatchWithId,
 }
 
 export default function OddsSetter(props: OddsSetterProps) {
@@ -42,11 +45,12 @@ export default function OddsSetter(props: OddsSetterProps) {
     }
 
     async function submit() {
-        const ref = doc(getFirestore(), "matches", props.mid, "odds", "odds") as DocumentReference<Odds>
+        console.log('Submit', props.matchDayId, props.match.id);
+        const ref = getMatchDoc(props.matchDayId, props.match.id);
         await updateDoc(ref, {
-            H: odds[OddsOptions.H],
-            U: odds[OddsOptions.U],
-            B: odds[OddsOptions.B],
+            'odds.H': odds[OddsOptions.H],
+            'odds.U': odds[OddsOptions.U],
+            'odds.B': odds[OddsOptions.B],
         });
     }
 

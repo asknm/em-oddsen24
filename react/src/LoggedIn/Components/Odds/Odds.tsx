@@ -3,10 +3,11 @@ import OddsAsBookmaker from "./OddsAsBookmaker"
 import OddsAsBetter from "./OddsAsBetter"
 import { ToOddsArray } from "../../../types/Odds"
 import { Typography } from '@mui/material';
-import { DtoMatch } from '../../../types/Match';
+import { FirebaseMatchWithId } from '../../../types/Match';
 
 type OddsProps = {
-    match: DtoMatch,
+    matchDayId: string,
+    match: FirebaseMatchWithId,
     uid: string,
 }
 
@@ -15,10 +16,10 @@ export default function Odds(props: OddsProps) {
     let oddsComponent: JSX.Element | null = null;
     if (props.match.odds) {
         if (props.uid === props.match.odds.bookmaker.id) {
-            oddsComponent = <OddsAsBookmaker odds={props.match.odds} mid={props.match.id} />
+            oddsComponent = <OddsAsBookmaker matchDayId={props.matchDayId} match={props.match} />
         }
         else if (props.match.odds.H) {
-            oddsComponent = <OddsAsBetter odds={ToOddsArray(props.match.odds)} match={props.match} uid={props.uid} />
+            oddsComponent = <OddsAsBetter matchDayId={props.matchDayId} odds={ToOddsArray(props.match.odds)} match={props.match} uid={props.uid} />
         }
     }
 
