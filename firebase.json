@@ -33,11 +33,6 @@
         "region": "europe-central2"
       },
       {
-        "source": "/getMatchDayMatches",
-        "function": "getMatchDayMatches",
-        "region": "europe-central2"
-      },
-      {
         "source": "/updateMatch",
         "function": "updateMatch",
         "region": "europe-central2"

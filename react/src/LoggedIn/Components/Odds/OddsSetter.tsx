@@ -44,7 +44,6 @@ export default function OddsSetter(props: OddsSetterProps) {
     }
 
     async function submit() {
-        console.log('Submit', props.matchDayId, props.match.id);
         const ref = getMatchDoc(props.matchDayId, props.match.id);
         await updateDoc(ref, {
             'odds.H': odds[OddsOptions.H],

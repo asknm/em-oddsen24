@@ -7,7 +7,6 @@ import { myRegion } from "./constants";
 import { defineSecret } from "firebase-functions/params";
 import { fetchAllMatchesFromApiHandler } from "./handlers/fetchAllMatchesFromApi";
 import { getMatchDays } from "./handlers/getMatchDays";
-import { getMatchDayMatches } from "./handlers/getMatchDayMatches";
 import { updateMatch } from "./handlers/updateMatch";
 
 initializeApp({
@@ -45,34 +44,8 @@ exports.getMatchDays = functionBuilder
         try {
             res.set('Access-Control-Allow-Origin', '*');
             const matchDays = await getMatchDays(db);
-            // res.set('Cache-Control', 'public, max-age=3600');
+            res.set('Cache-Control', 'public, max-age=31536000');
             res.status(200).send(matchDays);
-        } catch (error) {
-            logger.error(error);
-            res.status(500).send(error);
-        }
-    });
-
-exports.getMatchDayMatches = functionBuilder
-    .https
-    .onRequest(async (req, res) => {
-        try {
-            res.set('Access-Control-Allow-Origin', '*');
-            // TODO: Is '*' needed or should this be 'Match-Day-Id'?
-            res.set('Access-Control-Allow-Headers', '*');
-            // TODO: Needed?
-            res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
-            if (req.method === 'OPTIONS') {
-                res.status(200).end();
-                return;
-            }
-            const matchDayId = req.get('Match-Day-Id');
-            if (!matchDayId) {
-                res.status(400).send('Match-Day-Id header is required');
-            }
-            const matches = await getMatchDayMatches(db, matchDayId!);
-            // res.set('Cache-Control', 'public, max-age=60');
-            res.status(200).send(matches);
         } catch (error) {
             logger.error(error);
             res.status(500).send(error);
@@ -82,6 +55,7 @@ exports.getMatchDayMatches = functionBuilder
 exports.updateMatch = functionBuilder
     .runWith({
         secrets: [footballDataKey],
+        maxInstances: 1,
     })
     .https
     .onRequest(async (req, res) => {
