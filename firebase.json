@@ -28,10 +28,6 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
-      },
-      {
         "source": "/getMatchDays",
         "function": "getMatchDays",
         "region": "europe-central2"
@@ -45,6 +41,10 @@
         "source": "/updateMatch",
         "function": "updateMatch",
         "region": "europe-central2"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }

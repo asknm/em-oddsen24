@@ -9,8 +9,8 @@ export default function Dashboard() {
 
     useEffect(() => {
         async function getMatchDays() {
-            // const response = await fetch('/getMatchDays');
-            const response = await fetch('https://europe-central2-em-oddsen24-test.cloudfunctions.net/getMatchDays');
+            const response = await fetch('/getMatchDays');
+            // const response = await fetch('https://europe-central2-em-oddsen24-test.cloudfunctions.net/getMatchDays');
             const data = await response.json();
             setMatchDays(data);
         }

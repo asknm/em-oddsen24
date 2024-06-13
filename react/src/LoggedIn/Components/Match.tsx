@@ -35,9 +35,8 @@ export default function Match(props: MatchProps) {
         }
 
         async function updateStandingIfNeeded() {
-            await fetch(`/updateMatch?matchDayId=${props.matchDayId}&matchDay=${props.match.id}`, {
-                method: 'POST',
-            });
+            // await fetch(`https://europe-central2-em-oddsen24-test.cloudfunctions.net/updateMatch?matchDayId=${props.matchDayId}&matchId=${props.match.id}`);
+            await fetch(`/updateMatch?matchDayId=${props.matchDayId}&matchId=${props.match.id}`);
         }
     }, [props.match, props.matchDayId]);
 
