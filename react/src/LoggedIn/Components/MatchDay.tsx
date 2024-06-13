@@ -43,11 +43,7 @@ export default function MatchDay(props: MatchDayProps) {
 
     const navigate = useNavigate();
     function navigateToMatchPage(match: FirebaseMatchWithId) {
-        navigate(`/matchDay/${props.matchDayId}/match/${match.id}`, {
-            state: {
-                match: match,
-            }
-        });
+        navigate(`/matchDay/${props.matchDayId}/match/${match.id}`);
     }
 
     function toggleExpanded() {

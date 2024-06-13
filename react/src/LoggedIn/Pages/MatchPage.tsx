@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { onSnapshot } from "@firebase/firestore";
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { FirebaseMatchWithId, getMatchDoc } from "../../types/Match";
 import Match from "../Components/Match"
 import Odds from "../Components/Odds/Odds";
@@ -9,14 +9,12 @@ import { getAuth } from "@firebase/auth";
 import BetList from "../Components/BetList";
 
 export default function MatchPage() {
-    const [match, setMatch] = useState<FirebaseMatchWithId | undefined>(useLocation().state?.match);
+    const [match, setMatch] = useState<FirebaseMatchWithId | undefined>();
 
     const { matchDayId, matchId } = useParams();
 
     useEffect(() => {
-        if (!match) {
-            getMatch(matchDayId!, matchId!);
-        }
+        getMatch(matchDayId!, matchId!);
 
         async function getMatch(matchDayId: string, matchId: string) {
             const ref = getMatchDoc(matchDayId, matchId);
