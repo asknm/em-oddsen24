@@ -48,7 +48,7 @@ export default function MatchDay(props: MatchDayProps) {
                 method: 'POST',
             });
         }
-    }, [props.matchDayId]);
+    }, [props.matchDayId, props.date]);
 
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
