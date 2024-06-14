@@ -1,3 +1,5 @@
+import { UserWithId } from "./user";
+
 export interface Odds {
     H: number,
     U: number,
@@ -19,6 +21,8 @@ export enum OddsOptions {
     U,
     B,
 };
+
+export type OddsWithBookmakerName = OddsWithBookmaker<UserWithId>;
 
 export function OddsFromArray(array: OddsArray): Odds {
     return {

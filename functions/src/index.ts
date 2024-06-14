@@ -1,5 +1,4 @@
 import { newUserHandler } from "./handlers/newUser";
-
 import { firestore, credential } from "firebase-admin";
 import { initializeApp } from "firebase-admin/app";
 import { region, FunctionBuilder, logger } from "firebase-functions";
@@ -8,6 +7,8 @@ import { defineSecret } from "firebase-functions/params";
 import { fetchAllMatchesFromApiHandler } from "./handlers/fetchAllMatchesFromApi";
 import { getMatchDays } from "./handlers/getMatchDays";
 import { updateMatch } from "./handlers/updateMatch";
+import { FirebaseMatch } from "./domain/match";
+import { settleDebts } from "./handlers/settleDebts";
 
 initializeApp({
     credential: credential.applicationDefault(),
@@ -75,4 +76,19 @@ exports.updateMatch = functionBuilder
             logger.error(error);
             res.status(500).send(error);
         }
+    });
+
+exports.matchUpdated = functionBuilder
+    .firestore
+    .document('matchDays/{matchDayId}/matches/{matchId}')
+    .onUpdate(async (change, context) => {
+        const beforeData = change.before.data() as FirebaseMatch;
+        if (beforeData.standing?.finished === true) {
+            return;
+        }
+        const afterData = change.after.data() as FirebaseMatch;
+        if (afterData.standing?.finished !== true) {
+            return;
+        }
+        await settleDebts(db, context.params.matchDayId, context.params.matchId, afterData);
     });

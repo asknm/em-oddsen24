@@ -2,11 +2,14 @@ import { Timestamp } from "firebase-admin/firestore";
 import { Score } from "./score"
 import { Team } from "./team"
 import { StandingWithFinished } from "./standing";
+import { OddsWithBookmakerName } from "./odds";
 
 export interface BaseMatch<DateType> {
     utcDate: DateType,
     homeTeam: Team,
     awayTeam: Team,
+    standing: StandingWithFinished | null
+    odds: OddsWithBookmakerName | null,
 }
 
 export interface BaseMatchWithId<IdType, DateType> extends BaseMatch<DateType> {

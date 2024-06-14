@@ -30,6 +30,7 @@ export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: strin
             awayTeam: fromApiTeam(apiMatch.awayTeam),
             standing: null,
             lastUpdated: null,
+            odds: null,
         };
         await matchRef.set(firebaseMatch);
     }
