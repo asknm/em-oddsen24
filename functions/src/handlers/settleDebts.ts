@@ -1,4 +1,4 @@
-import { DocumentReference, FieldValue, Firestore } from "firebase-admin/firestore";
+import { DocumentReference, Firestore } from "firebase-admin/firestore";
 import { FirebaseMatch } from "../domain/match";
 import { correctOddsOption, oddsValue } from "../extensions/oddsExtensions";
 import { betCollection } from "../extensions/betExtensions";
@@ -14,10 +14,10 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
         throw new Error("Missing odds");
     }
     const oddsV = oddsValue(odds, correctOption);
+    const betCollectionRef = betCollection(db, matchDayId, matchId);
 
     await db.runTransaction(async (t) => {
-        const betCollectionRef = betCollection(db, matchDayId, matchId);
-        const snapshot = await betCollectionRef.get();
+        const snapshot = await t.get(betCollectionRef);
         for (const betDoc of snapshot.docs) {
             const bet = betDoc.data();
             if (bet.selection === correctOption) {
@@ -25,21 +25,22 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
                 await transfer(odds.bookmaker.id, betDoc.id, winAmount);
             }
             else {
-                await transfer(betDoc.id, odds.bookmaker.id, -bet.amount);
+                await transfer(betDoc.id, odds.bookmaker.id, bet.amount);
+            }
+        }
+
+        async function transfer(from: string, to: string, amount: number) {
+            const fromRef = userDoc(db, from);
+            const ToRef = userDoc(db, to);
+            await incrementBalance(fromRef, -amount);
+            await incrementBalance(ToRef, amount);
+
+            async function incrementBalance(userDoc: DocumentReference, amount: number) {
+                const user = await userDoc.get();
+                t.update(userDoc, {
+                    "balance": user.get('balance') + amount,
+                });
             }
         }
     });
-
-    async function transfer(from: string, to: string, amount: number) {
-        const fromRef = userDoc(db, from);
-        const ToRef = userDoc(db, to);
-        await incrementBalance(fromRef, -amount);
-        await incrementBalance(ToRef, amount);
-    }
-
-    async function incrementBalance(userDoc: DocumentReference, amount: number) {
-        await userDoc.update({
-            "balance": FieldValue.increment(amount),
-        });
-    }
 }
