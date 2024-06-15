@@ -3,7 +3,6 @@ import { FirebaseMatch } from "../domain/match";
 import { correctOddsOption, oddsValue } from "../extensions/oddsExtensions";
 import { betCollection } from "../extensions/betExtensions";
 import { userDoc } from "../extensions/userExtensions";
-import { logger } from "firebase-functions/v1";
 import { UserWithBalance } from "../domain/user";
 
 export async function settleDebts(db: Firestore, matchDayId: string, matchId: string, match: FirebaseMatch) {
