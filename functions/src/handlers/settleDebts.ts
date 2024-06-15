@@ -38,7 +38,7 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
             async function incrementBalance(userDoc: DocumentReference, amount: number) {
                 const user = await userDoc.get();
                 t.update(userDoc, {
-                    "balance": user.get('balance') + amount,
+                    "balance": user.get('balance') ?? 0 + amount,
                 });
             }
         }
