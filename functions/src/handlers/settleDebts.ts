@@ -3,7 +3,7 @@ import { FirebaseMatch } from "../domain/match";
 import { correctOddsOption, oddsValue } from "../extensions/oddsExtensions";
 import { betCollection } from "../extensions/betExtensions";
 import { userDoc } from "../extensions/userExtensions";
-import { UserWithBalance } from "../domain/user";
+import { FirebaseUser } from "../domain/user";
 
 export async function settleDebts(db: Firestore, matchDayId: string, matchId: string, match: FirebaseMatch) {
     if (!match.standing) {
@@ -35,7 +35,7 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
         await incrementBalance(fromRef, -amount);
         await incrementBalance(ToRef, amount);
 
-        async function incrementBalance(userDoc: DocumentReference<UserWithBalance>, amount: number) {
+        async function incrementBalance(userDoc: DocumentReference<FirebaseUser>, amount: number) {
             return userDoc.update({
                 "balance": FieldValue.increment(amount),
             });

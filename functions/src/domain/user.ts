@@ -5,12 +5,14 @@ type BaseUser = {
 }
 
 export interface InsertUser extends BaseUser {
-    email: string | undefined,
+    email: string | null,
     timestamp: FieldValue,
 };
 
-export interface UserWithBalance extends BaseUser {
+export interface FirebaseUser extends BaseUser {
     balance: number | undefined,
+    totalBettedAmount: number | undefined,
+    matchesAsOdds: number | undefined,
 }
 
 export interface UserWithId extends BaseUser {
