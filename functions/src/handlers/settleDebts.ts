@@ -38,7 +38,7 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
             await incrementBalance(ToRef, amount);
 
             async function incrementBalance(userDoc: DocumentReference<UserWithBalance>, amount: number) {
-                const snapshot = await userDoc.get();
+                const snapshot = await t.get(userDoc)
                 const user = snapshot.data();
                 if (!user) {
                     throw new Error(`Could not find user with id ${userDoc.id}`);
