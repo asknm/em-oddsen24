@@ -10,7 +10,7 @@ export interface InsertUser extends BaseUser {
 };
 
 export interface UserWithBalance extends BaseUser {
-    balance: number,
+    balance: number | undefined,
 }
 
 export interface UserWithId extends BaseUser {

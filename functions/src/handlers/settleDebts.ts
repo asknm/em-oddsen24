@@ -3,6 +3,8 @@ import { FirebaseMatch } from "../domain/match";
 import { correctOddsOption, oddsValue } from "../extensions/oddsExtensions";
 import { betCollection } from "../extensions/betExtensions";
 import { userDoc } from "../extensions/userExtensions";
+import { logger } from "firebase-functions/v1";
+import { UserWithBalance } from "../domain/user";
 
 export async function settleDebts(db: Firestore, matchDayId: string, matchId: string, match: FirebaseMatch) {
     if (!match.standing) {
@@ -35,10 +37,17 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
             await incrementBalance(fromRef, -amount);
             await incrementBalance(ToRef, amount);
 
-            async function incrementBalance(userDoc: DocumentReference, amount: number) {
-                const user = await userDoc.get();
+            async function incrementBalance(userDoc: DocumentReference<UserWithBalance>, amount: number) {
+                const snapshot = await userDoc.get();
+                const user = snapshot.data();
+                if (!user) {
+                    throw new Error(`Could not find user with id ${userDoc.id}`);
+                }
+                const oldBalance = user?.balance ?? 0;
+                const newBalance = oldBalance + amount;
+                logger.info('Incrementing balance of ', user.name, ' from ', oldBalance, ' by ', amount, ' to ', newBalance);
                 t.update(userDoc, {
-                    "balance": user.get('balance') ?? 0 + amount,
+                    "balance": newBalance,
                 });
             }
         }
