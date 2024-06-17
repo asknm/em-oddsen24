@@ -1,15 +1,16 @@
-import { Firestore, Timestamp } from "firebase-admin/firestore";
+import { FieldValue, Firestore, QueryDocumentSnapshot, Timestamp } from "firebase-admin/firestore";
 import { userCollection } from "../extensions/userExtensions";
-import { UserWithId } from "../domain/user";
+import { FirebaseUser } from "../domain/user";
 import { matchCollection, matchCollectionFromMatchDayDoc, matchDayCollection } from "../extensions/matchExtensions";
 
 export async function setNextBookmaker(db: Firestore, currentMatchDayId: string) {
-    const countSnapshot = await matchCollection(db, currentMatchDayId).where('standing.finished', '==', false).count().get()
+    const countSnapshot = await matchCollection(db, currentMatchDayId).where('standing.finished', '!=', true).count().get()
     if (countSnapshot.data().count !== 0) {
         return;
     }
 
-    const nextBookmaker = await findNextBookmaker();
+    const nextBookmakerSnapshot = await findNextBookmaker();
+    const nextBookmaker = nextBookmakerSnapshot.data();
 
     const snapshot = await matchDayCollection(db).where('date', '>', Timestamp.now()).orderBy('date').limit(1).get();
 
@@ -17,20 +18,24 @@ export async function setNextBookmaker(db: Firestore, currentMatchDayId: string)
     const nextMatchDayMatchesSnapshot = await matchCollectionFromMatchDayDoc(nextMatchDay.ref).get();
     nextMatchDayMatchesSnapshot.forEach((match) => {
         match.ref.update({
-            'odds.bookmaker': nextBookmaker
+            'odds.bookmaker': {
+                id: nextBookmakerSnapshot.id,
+                name: nextBookmaker.name,
+            }
         });
     });
 
-    async function findNextBookmaker(): Promise<UserWithId> {
+    nextBookmakerSnapshot.ref.update({
+        matchesAsOdds: FieldValue.increment(nextMatchDayMatchesSnapshot.size)
+    });
+
+    async function findNextBookmaker(): Promise<QueryDocumentSnapshot<FirebaseUser>> {
         const usersSnapshot = await userCollection(db).get();
-        const nextBookmaker = usersSnapshot.docs.reduce<[user: UserWithId | undefined, value: number]>((previous, current) => {
+        const nextBookmaker = usersSnapshot.docs.reduce<[user: QueryDocumentSnapshot<FirebaseUser> | undefined, value: number]>((previous, current) => {
             const user = current.data();
             const value = (user.totalBettedAmount ?? 0) / (user.matchesAsOdds ?? 0.1);
             if (value > previous[1]) {
-                return [{
-                    id: current.id,
-                    name: user.name,
-                }, value];
+                return [current, value];
             }
             return previous;
         }, [undefined, 0]);
