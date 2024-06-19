@@ -9,7 +9,6 @@ import { getMatchDays } from "./handlers/getMatchDays";
 import { updateMatch } from "./handlers/updateMatch";
 import { FirebaseMatch } from "./domain/match";
 import { settleDebts } from "./handlers/settleDebts";
-import { setNextBookmaker } from "./handlers/setNextBookmaker";
 
 initializeApp({
     credential: credential.applicationDefault(),
