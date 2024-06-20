@@ -31,6 +31,7 @@ export async function fetchAllMatchesFromApiHandler(db: Firestore, apiKey: strin
             standing: null,
             lastUpdated: null,
             odds: null,
+            settled: false,
         };
         await matchRef.set(firebaseMatch);
     }
