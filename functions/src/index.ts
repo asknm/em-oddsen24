@@ -83,13 +83,14 @@ exports.matchUpdated = functionBuilder
     .firestore
     .document('matchDays/{matchDayId}/matches/{matchId}')
     .onUpdate(async (change, context) => {
-        const beforeData = change.before.data() as FirebaseMatch;
-        if (beforeData.standing?.finished === true) {
-            return;
-        }
         const afterData = change.after.data() as FirebaseMatch;
         if (afterData.standing?.finished === true) {
-            await settleDebts(db, context.params.matchDayId, context.params.matchId, afterData);
-            await setNextBookmaker(db, context.params.matchDayId);
+            const beforeData = change.before.data() as FirebaseMatch;
+            if (beforeData.standing?.finished !== true) {
+                await settleDebts(db, context.params.matchDayId, context.params.matchId, afterData);
+            }
+            else if (afterData.settled === true) {
+                await setNextBookmaker(db, context.params.matchDayId);
+            }
         }
     });

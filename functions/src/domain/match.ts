@@ -10,6 +10,7 @@ export interface BaseMatch<DateType> {
     awayTeam: Team,
     standing: StandingWithFinished | null
     odds: OddsWithBookmakerName | null,
+    settled: Boolean | null,
 }
 
 export interface BaseMatchWithId<IdType, DateType> extends BaseMatch<DateType> {

@@ -4,6 +4,8 @@ import { correctOddsOption, oddsValue } from "../extensions/oddsExtensions";
 import { betCollection } from "../extensions/betExtensions";
 import { userDoc } from "../extensions/userExtensions";
 import { FirebaseUser } from "../domain/user";
+import { matchDoc } from "../extensions/matchExtensions";
+import { logger } from "firebase-functions/v1";
 
 export async function settleDebts(db: Firestore, matchDayId: string, matchId: string, match: FirebaseMatch) {
     if (!match.standing) {
@@ -29,7 +31,13 @@ export async function settleDebts(db: Firestore, matchDayId: string, matchId: st
         }
     }
 
+    const matchRef = matchDoc(db, matchDayId, matchId);
+    matchRef.update({
+        settled: true,
+    });
+
     async function transfer(from: string, to: string, amount: number) {
+        logger.info('Transferring ', amount, ' from ', from, ' to ', to);        
         const fromRef = userDoc(db, from);
         const ToRef = userDoc(db, to);
         await incrementBalance(fromRef, -amount);
