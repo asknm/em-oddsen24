@@ -9,7 +9,6 @@ import { getMatchDays } from "./handlers/getMatchDays";
 import { updateMatch } from "./handlers/updateMatch";
 import { FirebaseMatch } from "./domain/match";
 import { settleDebts } from "./handlers/settleDebts";
-import { setNextBookmaker } from "./handlers/setNextBookmaker";
 
 initializeApp({
     credential: credential.applicationDefault(),
@@ -90,7 +89,7 @@ exports.matchUpdated = functionBuilder
                 await settleDebts(db, context.params.matchDayId, context.params.matchId, afterData);
             }
             else if (afterData.settled === true) {
-                await setNextBookmaker(db, context.params.matchDayId);
+                // await setNextBookmaker(db, context.params.matchDayId);
             }
         }
     });
