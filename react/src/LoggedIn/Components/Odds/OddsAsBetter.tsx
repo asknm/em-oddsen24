@@ -4,12 +4,12 @@ import { useEffect, useState } from "react"
 import { BaseBet, getBetsDoc } from "../../../types/Bet"
 import OddsBetter from "./OddsBetter"
 import OddsViewer from "./OddsViewer"
-import { OddsArray } from '../../../types/Odds';
+import { HUBArray } from '../../../types/Odds';
 import { FirebaseMatchWithId, HasStarted } from '../../../types/Match';
 
 type OddsAsBetterProps = {
     matchDayId: string,
-    odds: OddsArray,
+    odds: HUBArray,
     match: FirebaseMatchWithId,
     uid: string,
 }

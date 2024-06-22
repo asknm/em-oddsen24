@@ -6,7 +6,7 @@ import NumericInput from "react-numeric-input";
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import RGL, { WidthProvider } from "react-grid-layout";
-import { OddsArray, OddsOptions } from '../../../types/Odds';
+import { HUBArray, OddsOptions } from '../../../types/Odds';
 import { FirebaseMatchWithId, getMatchDoc } from '../../../types/Match';
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -17,7 +17,7 @@ type OddsSetterProps = {
 
 export default function OddsSetter(props: OddsSetterProps) {
     const [locked, setLock] = useState(OddsOptions.U)
-    const [odds, setOdds] = useState<OddsArray>([3, 3, 3]);
+    const [odds, setOdds] = useState<HUBArray>([3, 3, 3]);
 
     function oddsChanged(option: OddsOptions, value: number | null) {
         if (option !== locked && value) {
@@ -32,7 +32,7 @@ export default function OddsSetter(props: OddsSetterProps) {
             }
             const newValue: number = 1 / (1 - a);
             const roundNewValue = Math.round(newValue * 20) / 20
-            const newOdds: OddsArray = [0, 0, 0];
+            const newOdds: HUBArray = [0, 0, 0];
             newOdds[option] = v1;
             newOdds[locked] = v2;
             newOdds[optionToChange] = roundNewValue;

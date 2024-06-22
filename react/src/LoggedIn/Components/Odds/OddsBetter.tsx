@@ -7,13 +7,13 @@ import NumericInput from 'react-numeric-input';
 import { useState } from 'react';
 import { doc, getFirestore, increment, serverTimestamp, setDoc, updateDoc } from '@firebase/firestore';
 import { getBetsDoc, InsertBet } from '../../../types/Bet';
-import { OddsArray, OddsOptions } from '../../../types/Odds';
+import { HUBArray, OddsOptions } from '../../../types/Odds';
 const ReactGridLayout = WidthProvider(RGL);
 
 type OddsBetterProps = {
     matchDayId: string,
     matchId: string,
-    odds: OddsArray,
+    odds: HUBArray,
     uid: string,
 }
 

@@ -35,7 +35,7 @@ export default function MatchPage() {
             <div>
                 <Match matchDayId={matchDayId!} match={match} />
                 <Odds matchDayId={matchDayId!} match={match} uid={uid} />
-                <BetList matchDayId={matchDayId!} matchId={matchId!} />
+                <BetList matchDayId={matchDayId!} match={match} />
             </div>
         }
     </div>

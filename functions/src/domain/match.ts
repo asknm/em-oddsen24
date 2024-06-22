@@ -9,7 +9,7 @@ export interface BaseMatch<DateType> {
     homeTeam: Team,
     awayTeam: Team,
     standing: StandingWithFinished | null
-    odds: OddsWithBookmakerName | null,
+    odds: OddsWithBookmakerName | null, // Should have been in a separate document to be able to listen to changes to match or odds independently.
     settled: Boolean,
 }
 

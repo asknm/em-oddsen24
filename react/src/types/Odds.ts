@@ -28,17 +28,17 @@ export async function ToOddsWithBookmakerName(oddsWithBookmakerRef: OddsWithBook
 }
 
 
-export interface Odds {
+export interface HUB {
     H: number,
     U: number,
     B: number,
 };
 
-export interface OddsWithBookmaker<T> extends Odds {
+export interface OddsWithBookmaker<T> extends HUB {
     bookmaker: T;
 }
 
-export type OddsArray = [
+export type HUBArray = [
     H: number,
     U: number,
     B: number,
@@ -50,7 +50,7 @@ export enum OddsOptions {
     B,
 };
 
-export function OddsFromArray(array: OddsArray): Odds {
+export function OddsFromArray(array: HUBArray): HUB {
     return {
         H: array[OddsOptions.H],
         U: array[OddsOptions.U],
@@ -58,6 +58,6 @@ export function OddsFromArray(array: OddsArray): Odds {
     };
 };
 
-export function ToOddsArray(odds: Odds): OddsArray {
+export function ToOddsArray(odds: HUB): HUBArray {
     return [odds.H, odds.U, odds.B];
 }
