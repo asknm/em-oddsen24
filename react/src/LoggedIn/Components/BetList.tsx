@@ -5,6 +5,7 @@ import { BetWithBetter, ToBetWithBetter, getBetsCol } from "../../types/Bet"
 import { Typography } from "@mui/material"
 import { FirebaseMatchWithId } from '../../types/Match';
 import { HUB, ToOddsArray } from '../../types/Odds';
+import HUBColumns from './HUBColumns';
 
 type BetListProps = {
     matchDayId: string,
@@ -50,7 +51,7 @@ export default function BetList(props: BetListProps) {
     const selectionSymbols = ["H", "U", "B"];
 
     return <div>
-        <p>{potentialGain?.H} {potentialGain?.U} {potentialGain?.B}</p>
+        <HUBColumns H={potentialGain?.H} U={potentialGain?.U} B={potentialGain?.B} />
         {bets.map((value, index) => {
             return <Typography variant="body1" key={index}> {value.amount}kr på {selectionSymbols[value.selection]} : {value.better} : {value.timestamp && value.timestamp.toDate().toLocaleString('nb-NO')} </Typography>
         })}
