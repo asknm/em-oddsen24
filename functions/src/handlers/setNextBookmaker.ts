@@ -1,17 +1,18 @@
 import { FieldValue, Firestore, QueryDocumentSnapshot, Timestamp } from "firebase-admin/firestore";
 import { userCollection } from "../extensions/userExtensions";
 import { FirebaseUser } from "../domain/user";
-import { matchCollectionFromMatchDayDoc, matchDayCollection } from "../extensions/matchExtensions";
+import { matchCollection, matchCollectionFromMatchDayDoc, matchDayCollection } from "../extensions/matchExtensions";
 import { logger } from "firebase-functions/v1";
 
 export async function setNextBookmaker(db: Firestore, currentMatchDayId: string) {
-    // const countSnapshot = await matchCollection(db, currentMatchDayId).where(Filter.or(Filter.where('standing.finished', '!=', true), Filter.where('standing', '==', null))).count().get()
-    // const countOfUnfinishedMatches = countSnapshot.data().count;
-    // logger.info('countOfUnfinishedMatches: ', countOfUnfinishedMatches);
-    // if (countOfUnfinishedMatches !== 0) {
-    //     logger.info('Unfinished matches remaining');
-    //     return;
-    // }
+    const matchesSnapshot = await matchCollection(db, currentMatchDayId).get()
+    for (const doc of matchesSnapshot.docs) {
+        const data = doc.data();
+        if (data.standing?.finished !== true) {
+            logger.info('Unfinished match remaining');
+            return;
+        }
+    }
 
     const nextBookmakerSnapshot = await findNextBookmaker();
     const nextBookmaker = nextBookmakerSnapshot.data();
