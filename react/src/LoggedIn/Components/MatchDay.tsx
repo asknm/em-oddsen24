@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import Typography from "@mui/material/Typography/Typography";
-import { onSnapshot } from "@firebase/firestore"
+import { onSnapshot, query, orderBy } from "@firebase/firestore"
 
 import { Collapse, createTheme, responsiveFontSizes } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,8 @@ export default function MatchDay(props: MatchDayProps) {
 
     const getMatchesAndExpand = useCallback(async () => {
         const matchColRef = getMatchColl(props.matchDayId);
-        onSnapshot(matchColRef, snapshot => {
+        const q = query(matchColRef, orderBy("utcDate"));
+        onSnapshot(q, snapshot => {
             setHasReadMatches(true)
             setMatches(snapshot.docs.map(doc => {
                 var match = doc.data() as FirebaseMatchWithId;
