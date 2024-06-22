@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from "react"
-import { onSnapshot } from "@firebase/firestore"
+import { onSnapshot, query, orderBy } from "@firebase/firestore"
 import { BetWithBetter, ToBetWithBetter, getBetsCol } from "../../types/Bet"
 import { Typography } from "@mui/material"
 
@@ -13,7 +13,9 @@ export default function BetList(props: BetListProps) {
     const [bets, setBets] = useState<BetWithBetter[]>([])
 
     useEffect(() => {
-        onSnapshot(getBetsCol(props.matchDayId, props.matchId), async snapshot => {
+        const betsCol = getBetsCol(props.matchDayId, props.matchId);
+        const q = query(betsCol, orderBy("timestamp"));
+        onSnapshot(q, async snapshot => {
             const betsWithBetterName = await Promise.all<BetWithBetter>(snapshot.docs.map(async doc => await ToBetWithBetter(doc)));
             setBets(betsWithBetterName);
         });
