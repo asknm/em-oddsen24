@@ -51,7 +51,7 @@ export default function BetList(props: BetListProps) {
     const selectionSymbols = ["H", "U", "B"];
 
     return <div>
-        <HUBColumns H={potentialGain?.H} U={potentialGain?.U} B={potentialGain?.B} />
+        <HUBColumns H={`(${potentialGain?.H})`} U={`(${potentialGain?.U})`} B={`(${potentialGain?.B})`} />
         {bets.map((value, index) => {
             return <Typography variant="body1" key={index}> {value.amount}kr på {selectionSymbols[value.selection]} : {value.better} : {value.timestamp && value.timestamp.toDate().toLocaleString('nb-NO')} </Typography>
         })}
