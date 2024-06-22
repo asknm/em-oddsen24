@@ -37,7 +37,7 @@ export default function BetList(props: BetListProps) {
         });
 
         function calculateGain(odds: number, oddsSelection: number): number {
-            return bets.reduce<number>((prev, current) => {
+            const gain = bets.reduce<number>((prev, current) => {
                 if (current.selection === oddsSelection) {
                     return prev - current.amount * (odds - 1);
                 }
@@ -45,13 +45,14 @@ export default function BetList(props: BetListProps) {
                     return prev + current.amount;
                 }
             }, 0);
+            return Math.round(gain * 20) / 20;
         }
     }, [props, bets]);
 
     const selectionSymbols = ["H", "U", "B"];
 
     return <div>
-        <HUBColumns H={`(${potentialGain?.H})`} U={`(${potentialGain?.U})`} B={`(${potentialGain?.B})`} />
+        <HUBColumns H={`(${potentialGain?.H}kr)`} U={`(${potentialGain?.U}kr)`} B={`(${potentialGain?.B}kr)`} />
         {bets.map((value, index) => {
             return <Typography variant="body1" key={index}> {value.amount}kr på {selectionSymbols[value.selection]} : {value.better} : {value.timestamp && value.timestamp.toDate().toLocaleString('nb-NO')} </Typography>
         })}
