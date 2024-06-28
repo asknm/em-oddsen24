@@ -1,6 +1,7 @@
 import { FieldValue, Firestore } from "firebase-admin/firestore";
 import { matchDoc } from "../extensions/matchExtensions";
 import { getMatchFromApi } from "../helpers/apiHelpers";
+import { fromApiTeam } from "../extensions/teamExtensions";
 
 export async function updateMatch(db: Firestore, apiKey: string, matchDayId: string, matchId: string) {
     var snapshot = await matchDoc(db, matchDayId, matchId).get();
@@ -12,6 +13,8 @@ export async function updateMatch(db: Firestore, apiKey: string, matchDayId: str
             'standing.away': apiMatch.score.fullTime.away,
             'standing.finished': apiMatch.status === "FINISHED",
             lastUpdated: FieldValue.serverTimestamp(),
+            homeTeam: fromApiTeam(apiMatch.homeTeam),
+            awayTeam: fromApiTeam(apiMatch.awayTeam),
         });
     }
 }

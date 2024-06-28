@@ -30,12 +30,9 @@ type MatchProps = {
 export default function Match(props: MatchProps) {
 
     useEffect(() => {
-        if (Date.now() > props.match.utcDate.seconds * 1000) {
-            updateStandingIfNeeded();
-        }
+        updateMatch();
 
-        async function updateStandingIfNeeded() {
-            // await fetch(`https://europe-central2-em-oddsen24-test.cloudfunctions.net/updateMatch?matchDayId=${props.matchDayId}&matchId=${props.match.id}`);
+        async function updateMatch() {
             await fetch(`/updateMatch?matchDayId=${props.matchDayId}&matchId=${props.match.id}`);
         }
     }, [props.match, props.matchDayId]);

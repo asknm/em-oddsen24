@@ -4,7 +4,6 @@ import { initializeApp } from "firebase-admin/app";
 import { region, FunctionBuilder, logger } from "firebase-functions";
 import { myRegion } from "./constants";
 import { defineSecret } from "firebase-functions/params";
-import { fetchAllMatchesFromApiHandler } from "./handlers/fetchAllMatchesFromApi";
 import { getMatchDays } from "./handlers/getMatchDays";
 import { updateMatch } from "./handlers/updateMatch";
 import { FirebaseMatch } from "./domain/match";
@@ -25,20 +24,20 @@ exports.newUser =
     functionBuilder
         .auth.user().onCreate(async (user) => await newUserHandler(user, db));
 
-exports.fetchAllMatchesFromApi = functionBuilder
-    .runWith({
-        secrets: [footballDataKey],
-    })
-    .https
-    .onRequest(async (_, res) => {
-        try {
-            await fetchAllMatchesFromApiHandler(db, footballDataKey.value());
-            res.status(200).send();
-        } catch (error) {
-            logger.error(error);
-            res.status(500).send(error);
-        }
-    });
+// exports.fetchAllMatchesFromApi = functionBuilder
+//     .runWith({
+//         secrets: [footballDataKey],
+//     })
+//     .https
+//     .onRequest(async (_, res) => {
+//         try {
+//             await fetchAllMatchesFromApiHandler(db, footballDataKey.value());
+//             res.status(200).send();
+//         } catch (error) {
+//             logger.error(error);
+//             res.status(500).send(error);
+//         }
+//     });
 
 exports.getMatchDays = functionBuilder
     .https
