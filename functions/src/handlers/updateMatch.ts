@@ -9,8 +9,8 @@ export async function updateMatch(db: Firestore, apiKey: string, matchDayId: str
     if (data.standing?.finished !== true && (!data.lastUpdated || data.lastUpdated.toMillis() < Date.now() - 60 * 1000)) {
         const apiMatch = await getMatchFromApi(snapshot.id, apiKey);
         await snapshot.ref.update({
-            'standing.home': apiMatch.score.fullTime.home,
-            'standing.away': apiMatch.score.fullTime.away,
+            'standing.home': apiMatch.score.regularTime?.home ?? apiMatch.score.fullTime.home,
+            'standing.away': apiMatch.score.regularTime?.away ?? apiMatch.score.fullTime.away,
             'standing.finished': apiMatch.status === "FINISHED",
             lastUpdated: FieldValue.serverTimestamp(),
             homeTeam: fromApiTeam(apiMatch.homeTeam),
